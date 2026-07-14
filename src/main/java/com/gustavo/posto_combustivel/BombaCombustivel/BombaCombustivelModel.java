@@ -23,7 +23,7 @@ public class BombaCombustivelModel {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "tipo_combustivel_id")
+    @JoinColumn(name = "tipo_combustivel_id", nullable = false)
     private TipoCombustivelModel tipoCombustivel;
 
     @OneToMany(mappedBy = "bomba")

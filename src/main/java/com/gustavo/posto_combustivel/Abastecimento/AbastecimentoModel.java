@@ -24,6 +24,7 @@ public class AbastecimentoModel {
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime data;
+    @Column(name = "valor_total", nullable = false)
     private BigDecimal valorTotal;
     @Column(nullable = false)
     private BigDecimal litros;
