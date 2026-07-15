@@ -1,8 +1,11 @@
 package com.gustavo.posto_combustivel.TipoCombustivel;
 
+import com.gustavo.posto_combustivel.exception.BusinessException;
+import com.gustavo.posto_combustivel.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,33 +27,38 @@ public class TipoCombustivelService {
                 .toList();
     }
 
-    public Optional<TipoCombustivelDTO> listarPorId(Long id){
-        Optional<TipoCombustivelModel> tipoPorId = repository.findById(id);
-        if(tipoPorId.isPresent()){
-            return tipoPorId.map(mapper::toDTO);
-        }
-        return Optional.empty();
+    public TipoCombustivelDTO listarPorId(Long id){
+        TipoCombustivelModel tipoId = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de combustível não encontrado com o ID: " + id));
+
+        return mapper.toDTO(tipoId);
     }
 
     public TipoCombustivelDTO salvar(TipoCombustivelDTO request){
+        if(request.getNome() == null || request.getNome().isEmpty()){
+            throw new BusinessException("Informe o nome do combustível.");
+        }
+        if(request.getPrecoLitro() == null || request.getPrecoLitro().compareTo(BigDecimal.ZERO) <= 0){
+            throw new BusinessException("Informe um preço válido para o combustível.");
+        }
         TipoCombustivelModel novoTipo = mapper.toModel(request);
         novoTipo = repository.save(novoTipo);
         return mapper.toDTO(novoTipo);
     }
 
     public TipoCombustivelDTO alterarTipo(Long id, TipoCombustivelDTO request){
-        Optional<TipoCombustivelDTO> tipoExiste = listarPorId(id);
-        if(tipoExiste.isPresent()){
-            TipoCombustivelModel tipoAtt = mapper.toModel(request);
-            tipoAtt.setId(id);
-            TipoCombustivelModel tipoSalvo = repository.save(tipoAtt);
-            return mapper.toDTO(tipoSalvo);
-        }
-        return null;
+        TipoCombustivelModel tipoAtt = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de combustível não encontrado com o ID: " + id));
+
+        tipoAtt.setNome(request.getNome() != null ? request.getNome() : tipoAtt.getNome());
+        tipoAtt.setPrecoLitro(request.getPrecoLitro() != null ? request.getPrecoLitro() : tipoAtt.getPrecoLitro());
+
+        return mapper.toDTO(repository.save(tipoAtt));
     }
 
     public void delete(Long id){
-         repository.deleteById(id);
+         listarPorId(id);
+        repository.deleteById(id);
         }
 
 }

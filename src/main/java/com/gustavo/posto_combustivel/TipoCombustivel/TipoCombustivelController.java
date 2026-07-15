@@ -15,36 +15,29 @@ public class TipoCombustivelController {
 
     private final TipoCombustivelService service;
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<TipoCombustivelDTO>> listar(){
         return ResponseEntity.ok(service.listar());
     }
 
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> listarPorId(@PathVariable Long id){
-      Optional<TipoCombustivelDTO> tipoId = service.listarPorId(id);
-      if(tipoId.isPresent()) {
-          return ResponseEntity.ok(tipoId);
-      }
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo não encontrado");
+        return ResponseEntity.ok(service.listarPorId(id));
     }
 
-    @PostMapping("/salvar")
+    @PostMapping
     public ResponseEntity<TipoCombustivelDTO> salvar(@RequestBody TipoCombustivelDTO request){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(request));
     }
 
-    @PutMapping("/alterar/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TipoCombustivelDTO> alterarTipo (@PathVariable Long id, @RequestBody TipoCombustivelDTO request){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.alterarTipo(id, request));
+            return ResponseEntity.ok(service.alterarTipo(id, request));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete (@PathVariable Long id){
-       if (service.listarPorId(id).isPresent()){
-            service.delete(id);
-            return ResponseEntity.ok("Tipo Deletado");
-       }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo não encontrado");
+        service.delete(id);
+        return ResponseEntity.ok("Tipo Deletado");
     }
 }
