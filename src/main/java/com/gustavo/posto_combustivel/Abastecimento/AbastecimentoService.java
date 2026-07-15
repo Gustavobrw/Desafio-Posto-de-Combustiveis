@@ -2,6 +2,8 @@ package com.gustavo.posto_combustivel.Abastecimento;
 
 import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelModel;
 import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelRepository;
+import com.gustavo.posto_combustivel.exception.BusinessException;
+import com.gustavo.posto_combustivel.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,25 +26,36 @@ public class AbastecimentoService {
     }
 
     public AbastecimentoDTO listarPorId(Long id){
-        Optional<AbastecimentoModel> abastecimento = repository.findById(id);
-        if(abastecimento.isPresent()){
-            return mapper.toDTO(abastecimento.orElse(null));
-        }
-        return null;
+        AbastecimentoModel abastecimento = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Abastecimento com o id "+ id + " não encontrado"
+                ));
+
+        return mapper.toDTO(abastecimento);
     }
 
-    public AbastecimentoDTO salvar(AbastecimentoDTO abastecimentoDTO){
+    public AbastecimentoDTO salvar(AbastecimentoRequestDTO request){
         //Busco a minha bomba
-        BombaCombustivelModel bomba = bombaCombustivelRepository.findById(abastecimentoDTO.getBomba().getId())
-                .orElseThrow(() -> new RuntimeException ("Bomba de Combustivel não encontrada"));
+       if (request.bombaId() == null ) {
+            throw new BusinessException("A bomba de combustível deve ser informada para realizar o abastecimento.");
+        }
+
+       if(request.litros() == null || request.litros().compareTo(BigDecimal.ZERO) <= 0){
+            throw new BusinessException("A quantidade de litros deve ser maior que zero.");
+        }
+
+       BombaCombustivelModel bomba = bombaCombustivelRepository.findById(request.bombaId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Bomba de combustível não encontrada"
+                ));
 
         //Calculo valor total
         BigDecimal precoLitro = bomba.getTipoCombustivel().getPrecoLitro();
-        BigDecimal valorTotal = precoLitro.multiply(abastecimentoDTO.getLitros());
+        BigDecimal valorTotal = precoLitro.multiply(request.litros());
 
         AbastecimentoModel abastecimento = AbastecimentoModel.builder()
-                .data(abastecimentoDTO.getData())
-                .litros(abastecimentoDTO.getLitros())
+                .data(request.data())
+                .litros(request.litros())
                 .valorTotal(valorTotal)
                 .bomba(bomba)
                 .build();
@@ -52,16 +65,33 @@ public class AbastecimentoService {
         return mapper.toDTO(abastecimentoSalvo);
     }
 
-    public AbastecimentoDTO alterar(Long id, AbastecimentoDTO abastecimentoDTO){
-        AbastecimentoModel abastecimentoAtt = mapper.toModel(abastecimentoDTO);
-        abastecimentoAtt.setId(id);
-        repository.save(abastecimentoAtt);
+    public AbastecimentoDTO alterar(Long id, AbastecimentoRequestDTO request){
+        AbastecimentoModel abastecimentoExistente = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Abastecimento com o id "+ id + " não encontrado"
+                ));
 
-        return mapper.toDTO(abastecimentoAtt);
+        if(request.litros() != null ){
+            throw new BusinessException("Não é permitido alterar a quantidade de litros do abastecimento.");
+        }
 
+        if(request.bombaId() != null) {
+          throw new BusinessException("Não é permitido alterar a bomba de combustível do abastecimento.");
+        }
+
+        abastecimentoExistente.setData(request.data() != null ? request.data() : abastecimentoExistente.getData());
+
+        AbastecimentoModel abastecimentoAtualizado = repository.save(abastecimentoExistente);
+
+        return mapper.toDTO(abastecimentoAtualizado);
     }
 
     public void delete(Long id){
-        repository.deleteById(id);
+        AbastecimentoModel abastecimentoExistente = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Abastecimento não encontrado"
+                ));
+
+        repository.delete(abastecimentoExistente);
     }
 }

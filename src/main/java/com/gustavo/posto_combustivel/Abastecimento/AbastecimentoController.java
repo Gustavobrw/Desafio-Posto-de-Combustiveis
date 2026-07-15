@@ -14,39 +14,30 @@ public class AbastecimentoController {
 
     private final AbastecimentoService service;
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<AbastecimentoDTO>> listar (){
         return ResponseEntity.ok(service.listar());
     }
 
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<?> listarPorId(@PathVariable Long id){
-        AbastecimentoDTO abastecimentoId = service.listarPorId(id);
-        if(abastecimentoId != null){
-            return ResponseEntity.ok(abastecimentoId);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Abastecimento não encontrado");
+    @GetMapping("/{id}")
+    public ResponseEntity<AbastecimentoDTO> listarPorId(@PathVariable Long id){
+        return ResponseEntity.ok(service.listarPorId(id));
     }
 
-    @PostMapping("/salvar")
-    public ResponseEntity<AbastecimentoDTO> salvar(@RequestBody AbastecimentoDTO abastecimentoDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(abastecimentoDTO));
+    @PostMapping
+    public ResponseEntity<AbastecimentoDTO> salvar(@RequestBody AbastecimentoRequestDTO request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(request));
     }
 
-    @PutMapping("/alterar/{id}")
-    public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody AbastecimentoDTO abastecimentoDTO){
-        if(service.listarPorId(id) != null){
-            return ResponseEntity.ok(service.alterar(id, abastecimentoDTO));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Abastecimento não encontrado");
+    @PutMapping("/{id}")
+    public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody AbastecimentoRequestDTO request){
+        return ResponseEntity.ok(service.alterar(id, request));
+
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
-        if(service.listarPorId(id) != null){
-            service.delete(id);
-            return ResponseEntity.ok("Abastecimento deletado com sucesso");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Abastecimento não encontrado");
+       service.delete(id);
+         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Abastecimento Deletado");
     }
 }
