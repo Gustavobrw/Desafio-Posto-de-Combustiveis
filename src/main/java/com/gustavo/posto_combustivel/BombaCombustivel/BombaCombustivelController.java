@@ -13,40 +13,30 @@ import java.util.List;
 public class BombaCombustivelController {
     private final BombaCombustivelService service;
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<BombaCombustivelDTO>> listar (){
         return ResponseEntity.ok(service.listar());
     }
 
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<?> listarPorId(@PathVariable Long id){
-        BombaCombustivelDTO bombaId = service.listarPorId(id);
-        if( bombaId != null){
-            return ResponseEntity.ok(bombaId);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Bomba de combustivel não encontrada");
+    @GetMapping("/{id}")
+    public ResponseEntity<BombaCombustivelDTO> listarPorId(@PathVariable Long id){
+        return ResponseEntity.ok(service.listarPorId(id));
     }
 
-    @PostMapping("/salvar")
-    public ResponseEntity<BombaCombustivelDTO> salvar(@RequestBody BombaCombustivelDTO bombaCombustivelDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(bombaCombustivelDTO));
+    @PostMapping
+    public ResponseEntity<BombaCombustivelDTO> salvar(@RequestBody BombaCombustivelRequestDTO request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(request));
     }
 
-    @PutMapping("/alterar/{id}")
-    public ResponseEntity<?> alterar(@PathVariable Long id, @RequestBody BombaCombustivelDTO bombaCombustivelDTO){
-            if (service.listarPorId(id) != null) {
-                return ResponseEntity.ok(service.alterar(id, bombaCombustivelDTO));
-            }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Bomba de combustivel não encontrada");
+    @PutMapping("/{id}")
+    public ResponseEntity<BombaCombustivelDTO> alterar(@PathVariable Long id, @RequestBody BombaCombustivelRequestDTO request){
+        return ResponseEntity.ok(service.alterar(id, request));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
-        if(service.listarPorId(id) != null){
-            service.delete(id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Bomba deletada com sucesso");
-        }
-         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Bomba de combustivel não encontrada");
+        service.delete(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Bomba deletada com sucesso");
     }
 
 }

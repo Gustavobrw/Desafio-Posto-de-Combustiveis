@@ -2,6 +2,8 @@ package com.gustavo.posto_combustivel.BombaCombustivel;
 
 import com.gustavo.posto_combustivel.TipoCombustivel.TipoCombustivelModel;
 import com.gustavo.posto_combustivel.TipoCombustivel.TipoCombustivelRepository;
+import com.gustavo.posto_combustivel.exception.BusinessException;
+import com.gustavo.posto_combustivel.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,32 +26,52 @@ public class BombaCombustivelService {
     }
 
     public BombaCombustivelDTO listarPorId(Long id){
-        Optional<BombaCombustivelModel> bombaPorId = repository.findById(id);
-            return bombaPorId.map(mapper::toDTO).orElseThrow(() -> new NullPointerException("Bomba de combustivel não encotrada"));
-    }
-
-    public BombaCombustivelDTO salvar(BombaCombustivelDTO bombaCombustivelDTO){
-        TipoCombustivelModel tipo = tipoRepository.findById(bombaCombustivelDTO.getTipoCombustivel().getId())
-                .orElseThrow(() -> new RuntimeException("Tipo de combustivel não encontrado"));
-
-        BombaCombustivelModel bomba = BombaCombustivelModel.builder()
-                .nome(bombaCombustivelDTO.getNome())
-                .tipoCombustivel(tipo)
-                .build();
-
-        repository.save(bomba);
-
+        BombaCombustivelModel bomba = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bomba de combustivel não encontrada"));
         return mapper.toDTO(bomba);
     }
 
-    public BombaCombustivelDTO alterar(Long id,BombaCombustivelDTO bombaCombustivelDTO){
-        BombaCombustivelModel bombaAtt = mapper.toModel(bombaCombustivelDTO);
-        bombaAtt.setId(id);
-        repository.save(bombaAtt);
-        return mapper.toDTO(bombaAtt);
+    public BombaCombustivelDTO salvar(BombaCombustivelRequestDTO request){
+        if(request.nome() == null || request.nome().isEmpty()){
+            throw new BusinessException("Nome da bomba de combustivel não pode ser nulo ou vazio");
+        }
+        if(request.tipoCombustivelId() == null ){
+            throw new BusinessException("Tipo de combustivel não pode ser nulo");
+        }
+        TipoCombustivelModel tipoCombustivel = tipoRepository.findById(request.tipoCombustivelId())
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de combustivel não encontrado"));
+
+        BombaCombustivelModel bomba = BombaCombustivelModel
+                .builder()
+                .nome(request.nome())
+                .tipoCombustivel(tipoCombustivel)
+                .build();
+
+        repository.save(bomba);
+        return mapper.toDTO(bomba);
+    }
+
+    public BombaCombustivelDTO alterar(Long id,BombaCombustivelRequestDTO request){
+        BombaCombustivelModel bomba = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bomba de combustivel não encontrada"));
+
+        if(request.nome() != null && !request.nome().isEmpty()){
+            bomba.setNome(request.nome());
+        }
+
+        if(request.tipoCombustivelId() != null){
+            TipoCombustivelModel tipoCombustivel = tipoRepository.findById(request.tipoCombustivelId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Tipo de combustivel não encontrado"));
+            bomba.setTipoCombustivel(tipoCombustivel);
+        }
+
+        repository.save(bomba);
+        return mapper.toDTO(bomba);
     }
 
     public void delete(Long id){
-        repository.deleteById(id);
+        BombaCombustivelModel bomba = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bomba de combustivel não encontrada"));
+        repository.delete(bomba);
     }
 }
