@@ -1,13 +1,15 @@
-package com.gustavo.posto_combustivel.TipoCombustivel;
+package com.gustavo.posto_combustivel.service;
 
+import com.gustavo.posto_combustivel.dto.TipoCombustivelDTO;
+import com.gustavo.posto_combustivel.mapper.TipoCombustivelMapper;
+import com.gustavo.posto_combustivel.entity.TipoCombustivelModel;
+import com.gustavo.posto_combustivel.repository.TipoCombustivelRepository;
 import com.gustavo.posto_combustivel.exception.BusinessException;
 import com.gustavo.posto_combustivel.exception.ResourceNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TipoCombustivelService {

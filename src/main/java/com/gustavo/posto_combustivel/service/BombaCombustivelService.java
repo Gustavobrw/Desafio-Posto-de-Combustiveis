@@ -1,14 +1,18 @@
-package com.gustavo.posto_combustivel.BombaCombustivel;
+package com.gustavo.posto_combustivel.service;
 
-import com.gustavo.posto_combustivel.TipoCombustivel.TipoCombustivelModel;
-import com.gustavo.posto_combustivel.TipoCombustivel.TipoCombustivelRepository;
+import com.gustavo.posto_combustivel.dto.BombaCombustivelDTO;
+import com.gustavo.posto_combustivel.dto.BombaCombustivelRequestDTO;
+import com.gustavo.posto_combustivel.entity.BombaCombustivelModel;
+import com.gustavo.posto_combustivel.entity.TipoCombustivelModel;
+import com.gustavo.posto_combustivel.mapper.BombaCombustivelMapper;
+import com.gustavo.posto_combustivel.repository.BombaCombustivelRepository;
+import com.gustavo.posto_combustivel.repository.TipoCombustivelRepository;
 import com.gustavo.posto_combustivel.exception.BusinessException;
 import com.gustavo.posto_combustivel.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

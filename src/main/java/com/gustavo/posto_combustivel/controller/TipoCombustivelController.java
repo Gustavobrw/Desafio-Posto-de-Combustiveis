@@ -1,12 +1,13 @@
-package com.gustavo.posto_combustivel.TipoCombustivel;
+package com.gustavo.posto_combustivel.controller;
 
+import com.gustavo.posto_combustivel.dto.TipoCombustivelDTO;
+import com.gustavo.posto_combustivel.service.TipoCombustivelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/combustivel")

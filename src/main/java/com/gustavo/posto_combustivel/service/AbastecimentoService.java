@@ -1,7 +1,12 @@
-package com.gustavo.posto_combustivel.Abastecimento;
+package com.gustavo.posto_combustivel.service;
 
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelModel;
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelRepository;
+import com.gustavo.posto_combustivel.dto.AbastecimentoDTO;
+import com.gustavo.posto_combustivel.dto.AbastecimentoRequestDTO;
+import com.gustavo.posto_combustivel.entity.BombaCombustivelModel;
+import com.gustavo.posto_combustivel.entity.AbastecimentoModel;
+import com.gustavo.posto_combustivel.mapper.AbastecimentoMapper;
+import com.gustavo.posto_combustivel.repository.AbastecimentoRepository;
+import com.gustavo.posto_combustivel.repository.BombaCombustivelRepository;
 import com.gustavo.posto_combustivel.exception.BusinessException;
 import com.gustavo.posto_combustivel.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

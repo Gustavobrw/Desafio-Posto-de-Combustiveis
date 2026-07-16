@@ -1,6 +1,5 @@
-package com.gustavo.posto_combustivel.Abastecimento;
+package com.gustavo.posto_combustivel.dto;
 
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelDTO;
 import lombok.*;
 
 import java.math.BigDecimal;

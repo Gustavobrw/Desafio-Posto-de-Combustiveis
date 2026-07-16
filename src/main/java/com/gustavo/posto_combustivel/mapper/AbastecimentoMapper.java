@@ -1,7 +1,8 @@
-package com.gustavo.posto_combustivel.Abastecimento;
+package com.gustavo.posto_combustivel.mapper;
 
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelMapper;
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelModel;
+import com.gustavo.posto_combustivel.dto.AbastecimentoDTO;
+import com.gustavo.posto_combustivel.entity.BombaCombustivelModel;
+import com.gustavo.posto_combustivel.entity.AbastecimentoModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

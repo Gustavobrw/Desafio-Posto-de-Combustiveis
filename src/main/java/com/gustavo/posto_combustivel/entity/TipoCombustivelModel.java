@@ -1,6 +1,5 @@
-package com.gustavo.posto_combustivel.TipoCombustivel;
+package com.gustavo.posto_combustivel.entity;
 
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelModel;
 import jakarta.persistence.*;
 import lombok.*;
 

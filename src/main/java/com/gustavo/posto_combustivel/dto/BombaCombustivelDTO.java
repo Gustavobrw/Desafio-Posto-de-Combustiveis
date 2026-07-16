@@ -1,6 +1,5 @@
-package com.gustavo.posto_combustivel.BombaCombustivel;
+package com.gustavo.posto_combustivel.dto;
 
-import com.gustavo.posto_combustivel.TipoCombustivel.TipoCombustivelDTO;
 import lombok.*;
 
 

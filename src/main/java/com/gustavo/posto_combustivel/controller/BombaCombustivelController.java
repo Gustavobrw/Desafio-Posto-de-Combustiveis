@@ -1,5 +1,8 @@
-package com.gustavo.posto_combustivel.BombaCombustivel;
+package com.gustavo.posto_combustivel.controller;
 
+import com.gustavo.posto_combustivel.dto.BombaCombustivelDTO;
+import com.gustavo.posto_combustivel.dto.BombaCombustivelRequestDTO;
+import com.gustavo.posto_combustivel.service.BombaCombustivelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

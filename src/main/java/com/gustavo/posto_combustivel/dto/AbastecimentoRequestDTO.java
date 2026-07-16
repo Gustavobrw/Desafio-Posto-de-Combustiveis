@@ -1,4 +1,4 @@
-package com.gustavo.posto_combustivel.Abastecimento;
+package com.gustavo.posto_combustivel.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

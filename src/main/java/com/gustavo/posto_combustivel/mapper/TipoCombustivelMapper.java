@@ -1,6 +1,7 @@
-package com.gustavo.posto_combustivel.TipoCombustivel;
+package com.gustavo.posto_combustivel.mapper;
 
-import lombok.experimental.UtilityClass;
+import com.gustavo.posto_combustivel.dto.TipoCombustivelDTO;
+import com.gustavo.posto_combustivel.entity.TipoCombustivelModel;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,8 +1,6 @@
-package com.gustavo.posto_combustivel.Abastecimento;
+package com.gustavo.posto_combustivel.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gustavo.posto_combustivel.BombaCombustivel.BombaCombustivelModel;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
