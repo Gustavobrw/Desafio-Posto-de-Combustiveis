@@ -51,7 +51,7 @@ public class BombaCombustivelService {
                 .tipoCombustivel(tipoCombustivel)
                 .build();
 
-        repository.save(bomba);
+        bomba = repository.save(bomba);
         return mapper.toDTO(bomba);
     }
 
