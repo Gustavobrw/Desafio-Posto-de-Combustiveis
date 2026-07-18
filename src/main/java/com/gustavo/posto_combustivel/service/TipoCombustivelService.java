@@ -37,7 +37,7 @@ public class TipoCombustivelService {
     }
 
     public TipoCombustivelDTO salvar(TipoCombustivelDTO request){
-        if(request.getNome() == null || request.getNome().isEmpty()){
+        if(request.getNome() == null || request.getNome().isBlank()){
             throw new BusinessException("Informe o nome do combustível.");
         }
         if(request.getPrecoLitro() == null || request.getPrecoLitro().compareTo(BigDecimal.ZERO) <= 0){
