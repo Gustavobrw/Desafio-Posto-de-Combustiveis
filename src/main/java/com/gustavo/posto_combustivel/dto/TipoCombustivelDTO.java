@@ -1,5 +1,6 @@
 package com.gustavo.posto_combustivel.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -10,8 +11,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TipoCombustivelDTO {
-
-private Long id;
-private String nome;
-private BigDecimal precoLitro;
+    @Schema(type = "Long", description = "Codigo do tipo combustível")
+    private Long id;
+    @Schema(type = "String", description = "Nome do tipo combustível")
+    private String nome;
+    @Schema(type = "BigDecimal", description = "Preco do litro do tipo combustível")
+    private BigDecimal precoLitro;
 }
